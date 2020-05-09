@@ -1,7 +1,7 @@
 # Watch folder for changes
 
 Simple script which watches for files and folders changes.
-Each add/remove of file/folder will call exeternal script - in this case it will be a wp-cli script ```wp loop media [add|remove] /changed/filed/path
+Each add/remove of file/folder will call exeternal script - in this case it will be a wp-cli script ```wp loop media [add|remove] /changed/filed/path```
 
 use:
 ```
