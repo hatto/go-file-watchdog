@@ -13,10 +13,12 @@ var watcher *fsnotify.Watcher // global watchers
 
 var files []string // global slice to store files
 
+var folderToWatch string
+
 // main
 func main() {
 
-	folderToWatch := "./" // current folder as default
+	folderToWatch = "./" // current folder as default
 
 	// if argument was passed, watch the folder
 	if len(os.Args) > 1 {
@@ -81,7 +83,6 @@ func GetFilesRecursively(root string) ([]string, error) {
 
     // walk all directories but collect only files
     err := filepath.Walk(root, func(path string, f os.FileInfo, err error) error {
-
 		// add to list if its a file
 		if !f.IsDir() {
 			_files = append(_files, path)
@@ -117,7 +118,6 @@ func addFiles(newFiles []string) {
 			execScript(file, "add"); //	call exec function for the current file
 		}
 	}
-	// printFiles()
 }
 
 /**
@@ -196,7 +196,10 @@ func addNewWatcher(event fsnotify.Event) {
  * script to call wp loop media file [add|remove] /path/to/file
  */
 func execScript(path string, action string) {
-	out, err := exec.Command("bash", "-c", " wp loop media file " + action + " " + path).Output()
+	fullPath, _ := filepath.Abs(path);
+	fullPath = strings.ReplaceAll(fullPath, " ", "%20")
+	fmt.Println(fullPath)
+	out, err := exec.Command("bash", "-c", " wp loop media file " + action + " " + fullPath).Output()
 	if err != nil {
 		fmt.Printf("%s\n", err)
 	}
